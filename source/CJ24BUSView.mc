@@ -12,6 +12,7 @@ class CJ24BUSView extends WatchUi.View {
     var mLine = "No lines selected. Hold down menu button to choose a line.";
     var lineMapper = new LineMapper();
     var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+    var showingSchedule = true;
     
     function initialize() {
         View.initialize();
@@ -32,7 +33,14 @@ class CJ24BUSView extends WatchUi.View {
     function onUpdate(dc as Dc) as Void {
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
+        if (showingSchedule) {
+            drawSchedule(dc);
+        } else {
+            drawPayment(dc);
+        }
+    }
 
+    function drawSchedule(dc as Dc) {
         var selectedLine = Storage.getValue("selectedLine");
         var schedule = LineMapper.getSchedule(today.day_of_week, selectedLine);
 
@@ -84,5 +92,25 @@ class CJ24BUSView extends WatchUi.View {
         mScrollDelta = 0;
         requestUpdate();
     } 
+
+    function onStartPressed() {
+        showingSchedule = false;
+        requestUpdate();
+    }
+
+
+    function onBack() {
+        showingSchedule = true;
+        requestUpdate();
+    }
+
+    function drawPayment(dc as Dc) {
+        var textFontHeight = dc.getFontHeight(Graphics.FONT_SYSTEM_SMALL);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        var dcWidth = dc.getWidth();
+        var dcHeight = dc.getHeight();
+        dc.drawText(dcWidth / 2, dcHeight / 2 - textFontHeight / 2, Graphics.FONT_SYSTEM_SMALL, "Press Start to Buy", Graphics.TEXT_JUSTIFY_CENTER);
+        requestUpdate();
+    }
 
 }

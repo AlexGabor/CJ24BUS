@@ -16,10 +16,15 @@ class CJ24BUSDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function onKey(event) {
+        System.println(event.getKey());
         if(WatchUi.KEY_DOWN == event.getKey()) {
             Application.getApp().mView.scrollUp();
         } else if(WatchUi.KEY_UP == event.getKey()) {
             Application.getApp().mView.scrollDown();
+        } else if(WatchUi.KEY_ENTER == event.getKey()) {
+            Application.getApp().mView.onStartPressed();
+        } else if(WatchUi.KEY_ESC == event.getKey()) {
+            Application.getApp().mView.onBack();
         }
         return true;
     }
