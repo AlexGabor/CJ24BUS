@@ -44,10 +44,16 @@ class CJ24BUSView extends WatchUi.View {
         var selectedLine = Storage.getValue("selectedLine");
         var schedule = LineMapper.getSchedule(today.day_of_week, selectedLine);
 
-        mLine = lineMapper.LineName[selectedLine];
+        var newLine = lineMapper.LineName[selectedLine];
+        if (newLine != mLine) {
+            mLine = lineMapper.LineName[selectedLine];
+            mScrollOffset = 0;
+        }
         var ends = lineMapper.LineEnds[selectedLine];
 
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        var nowString = today.hour.toString() + ":" + today.min.toString();
+        // var nowString = "05:30";
+        var nowMin = BusTime.stringTimeToMinutes(nowString);
 
         var dcWidth = dc.getWidth();
         var dcHeight = dc.getHeight();
@@ -55,14 +61,34 @@ class CJ24BUSView extends WatchUi.View {
         var textFontHeight = dc.getFontHeight(Graphics.FONT_SYSTEM_SMALL);
         var lineTextOffset = 5;
 
-        dc.drawText(dcWidth / 2, textStartHeight + mScrollOffset + mScrollDelta, Graphics.FONT_SYSTEM_SMALL, mLine, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(dcWidth / 2 - lineTextOffset, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight, Graphics.FONT_SYSTEM_SMALL, ends[0], Graphics.TEXT_JUSTIFY_RIGHT);
-        dc.drawText(dcWidth / 2 + lineTextOffset, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight, Graphics.FONT_SYSTEM_SMALL, ends[1], Graphics.TEXT_JUSTIFY_LEFT);
 
         for(var index = 0; index < schedule[0].size(); index++) {
+            var end0 = schedule[0][index];
+            var end1 = schedule[1][index];
+            var end0Min = BusTime.stringTimeToMinutes(end0);
+            var end1Min = BusTime.stringTimeToMinutes(end1);
+            if (end0Min < nowMin) {
+                dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLACK);
+            } else {
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+            }
             dc.drawText(dcWidth / 2 - lineTextOffset, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight * (index + 2), Graphics.FONT_SYSTEM_SMALL, schedule[0][index], Graphics.TEXT_JUSTIFY_RIGHT);
+
+            if (end1Min < nowMin) {
+                dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLACK);
+            } else {
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+            }
             dc.drawText(dcWidth / 2 + lineTextOffset, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight * (index + 2), Graphics.FONT_SYSTEM_SMALL, schedule[1][index], Graphics.TEXT_JUSTIFY_LEFT);
         }
+
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.fillRectangle(0, 0, dcWidth, textFontHeight * 2);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+
+        dc.drawText(dcWidth / 2, max(0, textStartHeight + mScrollOffset + mScrollDelta), Graphics.FONT_SYSTEM_SMALL, mLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(dcWidth / 2 - lineTextOffset, max(textFontHeight, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight), Graphics.FONT_SYSTEM_SMALL, ends[0], Graphics.TEXT_JUSTIFY_RIGHT);
+        dc.drawText(dcWidth / 2 + lineTextOffset, max(textFontHeight, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight), Graphics.FONT_SYSTEM_SMALL, ends[1], Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     // Called when this View is removed from the screen. Save the
