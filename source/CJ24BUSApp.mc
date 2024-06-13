@@ -3,6 +3,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 
 class CJ24BUSApp extends Application.AppBase {
+    var mView;
 
     function initialize() {
         AppBase.initialize();
@@ -21,7 +22,8 @@ class CJ24BUSApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ new CJ24BUSView(), new CJ24BUSDelegate() ];
+        mView = new CJ24BUSView();
+        return [ mView, new CJ24BUSDelegate() ];
     }
 
     function getGlanceView() as  [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {

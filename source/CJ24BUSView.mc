@@ -5,6 +5,8 @@ import Toybox.Application.Storage;
 
 class CJ24BUSView extends WatchUi.View {
 
+    var mScrollOffset = 0;
+    var mScrollDelta = 0;
     var mLine = "No lines selected. Hold down menu button to choose a line.";
     var lineMapper = new LineMapper();
 
@@ -28,13 +30,20 @@ class CJ24BUSView extends WatchUi.View {
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
 
-        mLine = lineMapper.LineName[Storage.getValue("selectedLine")];
+        var selectedLine = Storage.getValue("selectedLine");
+
+        mLine = lineMapper.LineName[selectedLine];
+        var ends = lineMapper.LineEnds[selectedLine];
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
 
         var dcWidth = dc.getWidth();
         var dcHeight = dc.getHeight();
+        var textFontHeight = dc.getFontHeight(Graphics.FONT_SYSTEM_SMALL);
+        var lineTextOffset = 5;
 
-        dc.drawText(dcWidth / 2, dcHeight / 2, Graphics.FONT_GLANCE, mLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(dcWidth / 2, dcHeight / 2 + mScrollOffset + mScrollDelta, Graphics.FONT_SYSTEM_SMALL, mLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(dcWidth / 2 - lineTextOffset, dcHeight / 2 + mScrollOffset + mScrollDelta + textFontHeight, Graphics.FONT_SYSTEM_SMALL, ends[0], Graphics.TEXT_JUSTIFY_RIGHT);
+        dc.drawText(dcWidth / 2 + lineTextOffset, dcHeight / 2 + mScrollOffset + mScrollDelta + textFontHeight, Graphics.FONT_SYSTEM_SMALL, ends[1], Graphics.TEXT_JUSTIFY_LEFT);
     }
 
     // Called when this View is removed from the screen. Save the
@@ -42,5 +51,27 @@ class CJ24BUSView extends WatchUi.View {
     // memory.
     function onHide() as Void {
     }
+
+    function scrollUp(){
+        mScrollOffset -= 5;
+        requestUpdate();
+    }
+
+
+    function scrollDown(){
+        mScrollOffset += 5;
+        requestUpdate();
+    }
+
+    function onDeltaChange(offset as Number) {
+        mScrollDelta = offset;
+        requestUpdate();
+    }
+
+    function onStopScroll() {
+        mScrollOffset += mScrollDelta;
+        mScrollDelta = 0;
+        requestUpdate();
+    } 
 
 }
