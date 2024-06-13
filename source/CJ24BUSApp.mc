@@ -6,6 +6,9 @@ class CJ24BUSApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
+        if (Storage.getValue("selectedLine") == null) {
+            Storage.setValue("selectedLine", "linia_1");
+        }
     }
 
     // onStart() is called on application start up
@@ -19,6 +22,10 @@ class CJ24BUSApp extends Application.AppBase {
     // Return the initial view of your application here
     function getInitialView() as [Views] or [Views, InputDelegates] {
         return [ new CJ24BUSView(), new CJ24BUSDelegate() ];
+    }
+
+    function getGlanceView() as  [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
+        return [ new CJ24BUSGlance() ];
     }
 
 }
