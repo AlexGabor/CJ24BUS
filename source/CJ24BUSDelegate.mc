@@ -8,7 +8,7 @@ class CJ24BUSDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function onMenu() as Boolean {
-        WatchUi.pushView(new Rez.Menus.MainMenu(), new CJ24BUSMenuDelegate(), WatchUi.SLIDE_UP);
+        WatchUi.pushView(new Rez.Menus.LinesMenu(), new CJ24BUSMenuDelegate(), WatchUi.SLIDE_UP);
         return true;
     }
 
