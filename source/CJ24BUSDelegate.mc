@@ -24,7 +24,9 @@ class CJ24BUSDelegate extends WatchUi.BehaviorDelegate {
         } else if(WatchUi.KEY_ENTER == event.getKey()) {
             Application.getApp().mView.onStartPressed();
         } else if(WatchUi.KEY_ESC == event.getKey()) {
-            Application.getApp().mView.onBack();
+            return Application.getApp().mView.onBack();
+        } else {
+            return false;
         }
         return true;
     }

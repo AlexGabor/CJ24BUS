@@ -126,8 +126,12 @@ class CJ24BUSView extends WatchUi.View {
 
 
     function onBack() {
+        if (showingSchedule == true) {
+            return false;
+        }
         showingSchedule = true;
         requestUpdate();
+        return true;
     }
 
     function drawPayment(dc as Dc) {
