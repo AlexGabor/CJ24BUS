@@ -1,6 +1,7 @@
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
+import Toybox.Application.Storage;
 
 class CJ24BUSMenuDelegate extends WatchUi.MenuInputDelegate {
 
@@ -9,11 +10,7 @@ class CJ24BUSMenuDelegate extends WatchUi.MenuInputDelegate {
     }
 
     function onMenuItem(item as Symbol) as Void {
-        if (item == :item_1) {
-            System.println("item 1");
-        } else if (item == :item_2) {
-            System.println("item 2");
-        }
+        Storage.setValue("selectedLine", item.toString());
     }
 
 }
