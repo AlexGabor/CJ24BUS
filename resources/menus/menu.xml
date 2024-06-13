@@ -5,7 +5,7 @@
     <menu-item id="linia_4" label="@Strings.linia_4" />
     <menu-item id="linia_5" label="@Strings.linia_5" />
     <menu-item id="linia_6" label="@Strings.linia_6" />
-    <menu-item id="linia_7" label="@Strings.linia_7" />
+    <!-- <menu-item id="linia_7" label="@Strings.linia_7" />
     <menu-item id="linia_8" label="@Strings.linia_8" />
     <menu-item id="linia_9" label="@Strings.linia_9" />
     <menu-item id="linia_10" label="@Strings.linia_10" />
@@ -14,7 +14,7 @@
     <menu-item id="linia_19" label="@Strings.linia_19" />
     <menu-item id="linia_21" label="@Strings.linia_21" />
     <menu-item id="linia_20" label="@Strings.linia_20" />
-    <menu-item id="linia_22" label="@Strings.linia_22" />
+    <menu-item id="linia_22" label="@Strings.linia_22" /> -->
     <!-- <menu-item id="linia_23" label="@Strings.linia_23" />
     <menu-item id="linia_24" label="@Strings.linia_24" />
     <menu-item id="linia_24B" label="@Strings.linia_24B" />
