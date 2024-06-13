@@ -12,7 +12,7 @@ class CJ24BUSView extends WatchUi.View {
     var mLine = "No lines selected. Hold down menu button to choose a line.";
     var lineMapper = new LineMapper();
     var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
-
+    
     function initialize() {
         View.initialize();
     }
@@ -34,10 +34,10 @@ class CJ24BUSView extends WatchUi.View {
         View.onUpdate(dc);
 
         var selectedLine = Storage.getValue("selectedLine");
+        var schedule = LineMapper.getSchedule(today.day_of_week, selectedLine);
 
         mLine = lineMapper.LineName[selectedLine];
         var ends = lineMapper.LineEnds[selectedLine];
-        var schedule = getSchedule(selectedLine);
 
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
 
@@ -55,17 +55,6 @@ class CJ24BUSView extends WatchUi.View {
             dc.drawText(dcWidth / 2 - lineTextOffset, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight * (index + 2), Graphics.FONT_SYSTEM_SMALL, schedule[0][index], Graphics.TEXT_JUSTIFY_RIGHT);
             dc.drawText(dcWidth / 2 + lineTextOffset, textStartHeight + mScrollOffset + mScrollDelta + textFontHeight * (index + 2), Graphics.FONT_SYSTEM_SMALL, schedule[1][index], Graphics.TEXT_JUSTIFY_LEFT);
         }
-    }
-
-    function getSchedule(selectedLine as String) {
-        var dayOfWeek = today.day_of_week;
-        if(dayOfWeek == "Sat") {
-            return lineMapper.LineScheduleSaturday[selectedLine];
-        }
-        if(dayOfWeek == "Sun") {
-            return lineMapper.LineScheduleSunday[selectedLine];
-        }
-        return lineMapper.LineScheduleWeek[selectedLine];
     }
 
     // Called when this View is removed from the screen. Save the

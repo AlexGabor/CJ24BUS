@@ -1,12 +1,14 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Application.Storage;
+import Toybox.Time.Gregorian;
 
 
 (:glance)
 class CJ24BUSGlance extends WatchUi.GlanceView {
 
-    var lineMapper = new LineMapper();
+    var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+
 
     function initialize() {
         GlanceView.initialize();
@@ -26,8 +28,13 @@ class CJ24BUSGlance extends WatchUi.GlanceView {
     // Update the view
     function onUpdate(dc as Dc) as Void {
         var selectedLine = Storage.getValue("selectedLine");
-        var ends = lineMapper.LineEnds[selectedLine];
-        var lineName = lineMapper.LineName[selectedLine];
+        var schedule = LineMapper.getSchedule(today.day_of_week, selectedLine);
+        var nowString = today.hour.toString() + ":" + today.min.toString();
+        var end0 = BusTime.findNextTime(schedule[0], nowString);
+        var end1 = BusTime.findNextTime(schedule[1], nowString);
+
+        var ends = LineMapper.LineEnds[selectedLine];
+        var lineName = LineMapper.LineName[selectedLine];
 
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         
@@ -38,8 +45,8 @@ class CJ24BUSGlance extends WatchUi.GlanceView {
 
         dc.drawText(dcWidth / 2, dcHeight * 0.58, Graphics.FONT_SYSTEM_XTINY, lineName, Graphics.TEXT_JUSTIFY_CENTER);
 
-        dc.drawText(0, dcHeight - glanceNumberHeight, Graphics.FONT_GLANCE_NUMBER, "8:23", Graphics.TEXT_JUSTIFY_LEFT);
-        dc.drawText(dcWidth, dcHeight - glanceNumberHeight, Graphics.FONT_GLANCE_NUMBER, "8:35", Graphics.TEXT_JUSTIFY_RIGHT);
+        dc.drawText(0, dcHeight - glanceNumberHeight, Graphics.FONT_GLANCE_NUMBER, end0, Graphics.TEXT_JUSTIFY_LEFT);
+        dc.drawText(dcWidth, dcHeight - glanceNumberHeight, Graphics.FONT_GLANCE_NUMBER, end1, Graphics.TEXT_JUSTIFY_RIGHT);
 
         dc.drawText(0, 0, Graphics.FONT_SYSTEM_XTINY, ends[0], Graphics.TEXT_JUSTIFY_LEFT);
         dc.drawText(dcWidth, 0, Graphics.FONT_SYSTEM_XTINY, ends[1], Graphics.TEXT_JUSTIFY_RIGHT);
@@ -50,5 +57,4 @@ class CJ24BUSGlance extends WatchUi.GlanceView {
     // // memory.
     // function onHide() as Void {
     // }
-
 }
